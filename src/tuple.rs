@@ -1,7 +1,7 @@
 use approx::{AbsDiffEq, RelativeEq};
 use std::ops::{Add, Div, Mul, Neg, Sub};
 
-#[derive(Debug, Copy,  Clone, PartialEq)]
+#[derive(Debug, Copy, Clone, PartialEq)]
 pub struct Tuple {
     pub x: f64,
     pub y: f64,
@@ -11,21 +11,11 @@ pub struct Tuple {
 
 impl Tuple {
     pub fn point(x: f64, y: f64, z: f64) -> Self {
-        Self {
-            x: x,
-            y: y,
-            z: z,
-            w: 1.0,
-        }
+        Self { x, y, z, w: 1.0 }
     }
 
     pub fn vector(x: f64, y: f64, z: f64) -> Self {
-        Self {
-            x: x,
-            y: y,
-            z: z,
-            w: 0.0,
-        }
+        Self { x, y, z, w: 0.0 }
     }
 
     pub fn is_point(&self) -> bool {
@@ -51,10 +41,7 @@ impl Tuple {
     }
 
     pub fn dot(&self, other: &Self) -> f64 {
-        self.x * other.x +
-        self.y * other.y +
-        self.z * other.z +
-        self.w * other.w 
+        self.x * other.x + self.y * other.y + self.z * other.z + self.w * other.w
     }
 
     pub fn cross(&self, other: &Self) -> Tuple {
@@ -118,6 +105,19 @@ impl Mul<f64> for Tuple {
     }
 }
 
+impl Mul<Tuple> for Tuple {
+    type Output = Self;
+
+    fn mul(self, other: Self) -> Self {
+        Self {
+            x: self.x * other.x,
+            y: self.y * other.y,
+            z: self.z * other.z,
+            w: self.w * other.w,
+        }
+    }
+}
+
 impl Div<f64> for Tuple {
     type Output = Self;
 
@@ -158,7 +158,6 @@ impl RelativeEq for Tuple {
             && f64::relative_eq(&self.w, &other.w, epsilon, max_relative)
     }
 }
-
 #[cfg(test)]
 mod tests {
     use super::Tuple;
@@ -354,7 +353,10 @@ mod tests {
 
     #[test]
     fn it_computes_the_dot_product_of_tuples() {
-        assert_relative_eq!(Tuple::vector(1., 2., 3.).dot(&Tuple::vector(2., 3., 4.)), 20.);
+        assert_relative_eq!(
+            Tuple::vector(1., 2., 3.).dot(&Tuple::vector(2., 3., 4.)),
+            20.
+        );
     }
 
     #[test]
