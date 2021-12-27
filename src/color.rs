@@ -1,4 +1,4 @@
-use approx::{AbsDiffEq, RelativeEq};
+use approx::{AbsDiffEq};
 use std::ops::{Add, Mul, Sub};
 
 #[derive(Debug, Copy, Clone, PartialEq)]
@@ -88,18 +88,6 @@ impl AbsDiffEq for Color {
     }
 }
 
-impl RelativeEq for Color {
-    fn default_max_relative() -> f64 {
-        f64::default_max_relative()
-    }
-
-    fn relative_eq(&self, other: &Self, epsilon: f64, max_relative: f64) -> bool {
-        f64::relative_eq(&self.r, &other.r, epsilon, max_relative)
-            && f64::relative_eq(&self.g, &other.g, epsilon, max_relative)
-            && f64::relative_eq(&self.b, &other.b, epsilon, max_relative)
-    }
-}
-
 #[cfg(test)]
 mod tests {
     use super::Color;
@@ -107,35 +95,35 @@ mod tests {
     #[test]
     fn it_creates_colors() {
         let color = Color::new(-0.5, 0.4, 1.7);
-        assert_relative_eq!(color.r, -0.5);
-        assert_relative_eq!(color.g, 0.4);
-        assert_relative_eq!(color.b, 1.7);
+        assert_abs_diff_eq!(color.r, -0.5);
+        assert_abs_diff_eq!(color.g, 0.4);
+        assert_abs_diff_eq!(color.b, 1.7);
     }
 
     #[test]
     fn it_adds_two_colors() {
         let color1 = Color::new(0.9, 0.6, 0.75);
         let color2 = Color::new(0.7, 0.1, 0.25);
-        assert_relative_eq!(color1 + color2, Color::new(1.6, 0.7, 1.0));
+        assert_abs_diff_eq!(color1 + color2, Color::new(1.6, 0.7, 1.0));
     }
 
     #[test]
     fn it_substracts_one_color_from_another() {
         let color1 = Color::new(0.9, 0.6, 0.75);
         let color2 = Color::new(0.7, 0.1, 0.25);
-        assert_relative_eq!(color1 - color2, Color::new(0.2, 0.5, 0.5));
+        assert_abs_diff_eq!(color1 - color2, Color::new(0.2, 0.5, 0.5));
     }
 
     #[test]
     fn it_multiply_a_color_by_a_scaler() {
         let color = Color::new(0.2, 0.3, 0.4);
-        assert_relative_eq!(color * 2.0, Color::new(0.4, 0.6, 0.8));
+        assert_abs_diff_eq!(color * 2.0, Color::new(0.4, 0.6, 0.8));
     }
 
     #[test]
     fn it_multiplies_two_colors() {
         let color1 = Color::new(1., 0.2, 0.4);
         let color2 = Color::new(0.9, 1., 0.1);
-        assert_relative_eq!(color1 * color2, Color::new(0.9, 0.2, 0.04));
+        assert_abs_diff_eq!(color1 * color2, Color::new(0.9, 0.2, 0.04));
     }
 }

@@ -1,4 +1,4 @@
-use approx::{AbsDiffEq, RelativeEq};
+use approx::{AbsDiffEq};
 use std::ops::{Add, Div, Mul, Neg, Sub};
 
 #[derive(Debug, Copy, Clone, PartialEq)]
@@ -10,6 +10,10 @@ pub struct Tuple {
 }
 
 impl Tuple {
+    pub fn new(x: f64, y: f64, z: f64, w: f64) -> Self {
+        Self { x, y, z, w }
+    }
+
     pub fn point(x: f64, y: f64, z: f64) -> Self {
         Self { x, y, z, w: 1.0 }
     }
@@ -146,18 +150,6 @@ impl AbsDiffEq for Tuple {
     }
 }
 
-impl RelativeEq for Tuple {
-    fn default_max_relative() -> f64 {
-        f64::default_max_relative()
-    }
-
-    fn relative_eq(&self, other: &Self, epsilon: f64, max_relative: f64) -> bool {
-        f64::relative_eq(&self.x, &other.x, epsilon, max_relative)
-            && f64::relative_eq(&self.y, &other.y, epsilon, max_relative)
-            && f64::relative_eq(&self.z, &other.z, epsilon, max_relative)
-            && f64::relative_eq(&self.w, &other.w, epsilon, max_relative)
-    }
-}
 #[cfg(test)]
 mod tests {
     use super::Tuple;
@@ -171,9 +163,9 @@ mod tests {
             w: 1.0,
         };
         assert!(thing.is_point());
-        assert_relative_eq!(thing.x, 4.3);
-        assert_relative_eq!(thing.y, -4.2);
-        assert_relative_eq!(thing.z, 3.1);
+        assert_abs_diff_eq!(thing.x, 4.3);
+        assert_abs_diff_eq!(thing.y, -4.2);
+        assert_abs_diff_eq!(thing.z, 3.1);
         assert_eq!(thing.is_vector(), false)
     }
 
@@ -186,29 +178,29 @@ mod tests {
             w: 0.0,
         };
         assert!(thing.is_vector());
-        assert_relative_eq!(thing.x, 4.3);
-        assert_relative_eq!(thing.y, -4.2);
-        assert_relative_eq!(thing.z, 3.1);
+        assert_abs_diff_eq!(thing.x, 4.3);
+        assert_abs_diff_eq!(thing.y, -4.2);
+        assert_abs_diff_eq!(thing.z, 3.1);
         assert_eq!(thing.is_point(), false)
     }
 
     #[test]
     fn it_creates_points() {
         let point = Tuple::point(4.3, -4.2, 3.1);
-        assert_relative_eq!(point.x, 4.3);
-        assert_relative_eq!(point.y, -4.2);
-        assert_relative_eq!(point.z, 3.1);
-        assert_relative_eq!(point.w, 1.0);
+        assert_abs_diff_eq!(point.x, 4.3);
+        assert_abs_diff_eq!(point.y, -4.2);
+        assert_abs_diff_eq!(point.z, 3.1);
+        assert_abs_diff_eq!(point.w, 1.0);
         assert!(point.is_point())
     }
 
     #[test]
     fn it_creates_vectors() {
         let vector = Tuple::vector(4.3, -4.2, 3.1);
-        assert_relative_eq!(vector.x, 4.3);
-        assert_relative_eq!(vector.y, -4.2);
-        assert_relative_eq!(vector.z, 3.1);
-        assert_relative_eq!(vector.w, 0.0);
+        assert_abs_diff_eq!(vector.x, 4.3);
+        assert_abs_diff_eq!(vector.y, -4.2);
+        assert_abs_diff_eq!(vector.z, 3.1);
+        assert_abs_diff_eq!(vector.w, 0.0);
         assert!(vector.is_vector())
     }
 
@@ -226,7 +218,7 @@ mod tests {
             z: 1.,
             w: 0.,
         };
-        assert_relative_eq!(
+        assert_abs_diff_eq!(
             tuple1 + tuple2,
             Tuple {
                 x: 1.,
@@ -241,35 +233,35 @@ mod tests {
     fn it_adds_two_vectors() {
         let vector1 = Tuple::vector(3., -2., 5.);
         let vector2 = Tuple::vector(-2., 3., 1.);
-        assert_relative_eq!(vector1 + vector2, Tuple::vector(1., 1., 6.))
+        assert_abs_diff_eq!(vector1 + vector2, Tuple::vector(1., 1., 6.))
     }
 
     #[test]
     fn it_substracts_two_points() {
         let point1 = Tuple::point(3., 2., 1.);
         let point2 = Tuple::point(5., 6., 7.);
-        assert_relative_eq!(point1 - point2, Tuple::vector(-2., -4., -6.))
+        assert_abs_diff_eq!(point1 - point2, Tuple::vector(-2., -4., -6.))
     }
 
     #[test]
     fn it_substracts_a_vector_from_a_point() {
         let point = Tuple::point(3., 2., 1.);
         let vector = Tuple::vector(5., 6., 7.);
-        assert_relative_eq!(point - vector, Tuple::point(-2., -4., -6.))
+        assert_abs_diff_eq!(point - vector, Tuple::point(-2., -4., -6.))
     }
 
     #[test]
     fn it_substracts_two_vectors() {
         let vector1 = Tuple::vector(3., 2., 1.);
         let vector2 = Tuple::vector(5., 6., 7.);
-        assert_relative_eq!(vector1 - vector2, Tuple::vector(-2., -4., -6.))
+        assert_abs_diff_eq!(vector1 - vector2, Tuple::vector(-2., -4., -6.))
     }
 
     #[test]
     fn it_substracts_a_vector_from_the_zero_vector() {
         let zero = Tuple::vector(0., 0., 0.);
         let vector = Tuple::vector(1., -2., 3.);
-        assert_relative_eq!(zero - vector, Tuple::vector(-1., 2., -3.))
+        assert_abs_diff_eq!(zero - vector, Tuple::vector(-1., 2., -3.))
     }
 
     #[test]
@@ -280,7 +272,7 @@ mod tests {
             z: 3.,
             w: -4.,
         };
-        assert_relative_eq!(
+        assert_abs_diff_eq!(
             -tuple,
             Tuple {
                 x: -1.,
@@ -299,7 +291,7 @@ mod tests {
             z: 3.,
             w: -4.,
         };
-        assert_relative_eq!(
+        assert_abs_diff_eq!(
             tuple * 3.5,
             Tuple {
                 x: 3.5,
@@ -318,7 +310,7 @@ mod tests {
             z: 3.,
             w: -4.,
         };
-        assert_relative_eq!(
+        assert_abs_diff_eq!(
             tuple / 2.,
             Tuple {
                 x: 0.5,
@@ -331,29 +323,29 @@ mod tests {
 
     #[test]
     fn it_computes_the_magnitude_of_vectors() {
-        assert_relative_eq!(Tuple::vector(1., 0., 0.).magnitude(), 1.);
-        assert_relative_eq!(Tuple::vector(0., 1., 0.).magnitude(), 1.);
-        assert_relative_eq!(Tuple::vector(0., 0., 1.).magnitude(), 1.);
-        assert_relative_eq!(Tuple::vector(1., 2., 3.).magnitude(), 14_f64.sqrt());
-        assert_relative_eq!(Tuple::vector(-1., -2., -3.).magnitude(), 14_f64.sqrt())
+        assert_abs_diff_eq!(Tuple::vector(1., 0., 0.).magnitude(), 1.);
+        assert_abs_diff_eq!(Tuple::vector(0., 1., 0.).magnitude(), 1.);
+        assert_abs_diff_eq!(Tuple::vector(0., 0., 1.).magnitude(), 1.);
+        assert_abs_diff_eq!(Tuple::vector(1., 2., 3.).magnitude(), 14_f64.sqrt());
+        assert_abs_diff_eq!(Tuple::vector(-1., -2., -3.).magnitude(), 14_f64.sqrt())
     }
 
     #[test]
     fn it_normalize_vectors() {
-        assert_relative_eq!(
+        assert_abs_diff_eq!(
             Tuple::vector(4., 0., 0.).normalized(),
             Tuple::vector(1., 0., 0.)
         );
-        assert_relative_eq!(
+        assert_abs_diff_eq!(
             Tuple::vector(1., 2., 3.).normalized(),
             Tuple::vector(1. / 14_f64.sqrt(), 2. / 14_f64.sqrt(), 3. / 14_f64.sqrt())
         );
-        assert_relative_eq!(Tuple::vector(4., 5., 6.).normalized().magnitude(), 1.);
+        assert_abs_diff_eq!(Tuple::vector(4., 5., 6.).normalized().magnitude(), 1.);
     }
 
     #[test]
     fn it_computes_the_dot_product_of_tuples() {
-        assert_relative_eq!(
+        assert_abs_diff_eq!(
             Tuple::vector(1., 2., 3.).dot(&Tuple::vector(2., 3., 4.)),
             20.
         );
@@ -363,7 +355,7 @@ mod tests {
     fn it_computes_the_cross_product_of_vectors() {
         let vector1 = Tuple::vector(1., 2., 3.);
         let vector2 = Tuple::vector(2., 3., 4.);
-        assert_relative_eq!(vector1.cross(&vector2), Tuple::vector(-1., 2., -1.));
-        assert_relative_eq!(vector2.cross(&vector1), Tuple::vector(1., -2., 1.));
+        assert_abs_diff_eq!(vector1.cross(&vector2), Tuple::vector(-1., 2., -1.));
+        assert_abs_diff_eq!(vector2.cross(&vector1), Tuple::vector(1., -2., 1.));
     }
 }
