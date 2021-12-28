@@ -3,7 +3,7 @@ use std::ops::{Index, IndexMut, Mul};
 use approx::{AbsDiffEq};
 use std::fmt;
 
-#[derive(Debug, PartialEq)]
+#[derive(Clone, Debug, PartialEq)]
 pub struct Matrix {
     pub(in crate::matrix) data: Vec<f64>,
     pub(in crate::matrix) width: usize,
@@ -64,7 +64,56 @@ impl IndexMut<(usize, usize)> for Matrix {
     }
 }
 
-impl Mul<&Matrix> for &Matrix {
+impl Mul<Matrix> for Matrix {
+    type Output = Matrix;
+
+    fn mul(self, other: Matrix) -> Matrix {
+        let mut data = Vec::new();
+        for row in 0..self.height {
+            for col in 0..other.width {
+                let mut value = 0.0;
+                for i in 0..self.width {
+                    value += self[(row, i)] * other[(i, col)]
+                }
+
+                data.push(value)
+            }
+        }
+
+        Matrix {
+            width: other.width,
+            height: self.height,
+            data,
+        }
+    }
+}
+
+impl Mul<Matrix> for &Matrix {
+    type Output = Matrix;
+
+    fn mul(self, other: Matrix) -> Matrix {
+        let mut data = Vec::new();
+        for row in 0..self.height {
+            for col in 0..other.width {
+                let mut value = 0.0;
+                for i in 0..self.width {
+                    value += self[(row, i)] * other[(i, col)]
+                }
+
+                data.push(value)
+            }
+        }
+
+        Matrix {
+            width: other.width,
+            height: self.height,
+            data,
+        }
+    }
+}
+
+
+impl Mul<&Matrix> for Matrix {
     type Output = Matrix;
 
     fn mul(self, other: &Matrix) -> Matrix {
@@ -88,12 +137,12 @@ impl Mul<&Matrix> for &Matrix {
     }
 }
 
-impl Mul<Tuple> for &Matrix {
+impl Mul<Tuple> for Matrix {
     type Output = Tuple;
 
     fn mul(self, other: Tuple) -> Tuple {
         let other = Matrix::from_tuple(other);
-        let res = self * &other;
+        let res = self * other;
         Tuple::new(res[(0, 0)], res[(1, 0)], res[(2, 0)], res[(3, 0)])
     }
 }
@@ -243,7 +292,7 @@ mod tests {
                 vec![16., 26., 46., 42.],
             ],
         );
-        assert_abs_diff_eq!(&matrix1 * &matrix2, expected);
+        assert_abs_diff_eq!(matrix1 * matrix2, expected);
     }
 
     #[test]
@@ -258,7 +307,7 @@ mod tests {
         );
         let tuple = Tuple::new(1., 2., 3., 1.);
         let expected = Tuple::new(18., 24., 33., 1.);
-        assert_abs_diff_eq!(&matrix * tuple, expected);
+        assert_abs_diff_eq!(matrix * tuple, expected);
     }
 
     #[test]
@@ -272,6 +321,7 @@ mod tests {
             ],
         );
         let identity = Matrix::identity(4);
-        assert_abs_diff_eq!(&matrix * &identity, matrix);
+        let expected = matrix.clone();
+        assert_abs_diff_eq!(matrix * identity, expected);
     }
 }

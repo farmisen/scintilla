@@ -1,4 +1,6 @@
 mod base;
-pub use base::Matrix;
 mod properties;
+mod transformations;
+
+pub use base::Matrix;
 
