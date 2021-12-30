@@ -65,6 +65,14 @@ impl Matrix {
     pub fn rotate_x(&self, a: f64) -> Self {
         Matrix::rotation_x_matrix(a) * self
     }
+
+    pub fn rotate_y(&self, a: f64) -> Self {
+        Matrix::rotation_y_matrix(a) * self
+    }
+
+    pub fn rotate_z(&self, a: f64) -> Self {
+        Matrix::rotation_z_matrix(a) * self
+    }
 }
 
 #[cfg(test)]

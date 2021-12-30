@@ -1,9 +1,18 @@
+#![allow(dead_code)]
+#![allow(unused_imports)]
+
 #[macro_use]
 extern crate approx;
 mod canvas;
-mod tuple;
 mod color;
 mod matrix;
+mod tuple;
+mod putting_it_together;
+
 fn main() {
-    println!("Hello, world!");
+    // putting_it_together::putting_it_together1::run()
+    // putting_it_together::putting_it_together2::run()
+    putting_it_together::putting_it_together3::run()
 }
+
+

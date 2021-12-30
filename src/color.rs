@@ -9,6 +9,14 @@ pub struct Color {
 }
 
 impl Color {
+    pub fn black() -> Self {
+        Self::new(0., 0., 0.)
+    }
+
+    pub fn white() -> Self {
+        Self::new(1., 1., 1.)
+    }
+
     pub fn new(r: f64, g: f64, b: f64) -> Self {
         Self { r, g, b }
     }
