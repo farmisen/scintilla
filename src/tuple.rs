@@ -1,6 +1,6 @@
-use approx::{AbsDiffEq};
+use approx::AbsDiffEq;
+use std::fmt;
 use std::ops::{Add, Div, Mul, Neg, Sub};
-
 #[derive(Debug, Copy, Clone, PartialEq)]
 pub struct Tuple {
     pub x: f64,
@@ -147,6 +147,12 @@ impl AbsDiffEq for Tuple {
             && f64::abs_diff_eq(&self.y, &other.y, epsilon)
             && f64::abs_diff_eq(&self.z, &other.z, epsilon)
             && f64::abs_diff_eq(&self.w, &other.w, epsilon)
+    }
+}
+
+impl fmt::Display for Tuple {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "({}, {}, {}, {})", self.x, self.y, self.z, self.w)
     }
 }
 
