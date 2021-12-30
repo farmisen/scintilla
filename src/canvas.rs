@@ -21,9 +21,8 @@ impl Canvas {
     }
 
     pub fn write_pixel(&mut self, x: usize, y: usize, color: Color) {
-        if x < self.width && y < self.height {
-            self.buffer[y * self.width + x] = color
-        }
+        assert!(x < self.width && y < self.height);
+        self.buffer[y * self.width + x] = color
     }
 
     pub fn to_ppm(&self) -> String {
