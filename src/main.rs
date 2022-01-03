@@ -7,6 +7,7 @@ mod canvas;
 mod color;
 mod matrix;
 mod tuple;
+mod geo;
 mod putting_it_together;
 
 fn main() {
