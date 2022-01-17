@@ -1,5 +1,6 @@
 #![allow(dead_code)]
 #![allow(unused_imports)]
+#![feature(generic_associated_types)]
 
 #[macro_use]
 extern crate approx;

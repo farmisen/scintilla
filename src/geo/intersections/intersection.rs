@@ -1,64 +1,38 @@
 // use core::fmt::Debug;
-use std::fmt;
+use crate::geo::{Intersectable, Ray, Sphere};
 use std::any::Any;
-use core::fmt::Debug;
-use crate::geo::{Ray, Sphere};
-
-
-enum Intersectable {
-    Sphere(Sphere),
-}
-
-impl Intersectable {
-    fn intersections(&self, ray: &Ray) -> Vec<Intersection> {
-        self.intersections(ray)
-    }
-}
-
-// pub trait Intersectable: Debug {
-//     fn intersections(&self, ray: &Ray) -> Vec<Intersection>;
-//     fn as_any(&self) -> &dyn Any;
-// }
-
-// #[derive(Debug, PartialEq)]
+use std::fmt;
+#[derive(Debug, PartialEq)]
 pub struct Intersection {
     pub t: f64,
-    pub intersectable: Box<dyn Intersectable>
+    pub intersectable: Intersectable,
 }
 
 impl Intersection {
-    pub fn new(t: f64, intersectable: Box<dyn Intersectable>) -> Self {
+    pub fn new(t: f64, intersectable: Intersectable) -> Self {
         Self {
             t: t,
-            intersectable
+            intersectable,
         }
     }
 }
 
 impl fmt::Display for Intersection {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "({}:{:?})", self.t, self.intersectable)
+        write!(f, "({}:{})", self.t, self.intersectable)
     }
 }
-
-// impl core::cmp::PartialEq for Intersection {
-//     fn eq(&self, other: &Self) -> bool {
-//         f64::abs_diff_eq(self.t, other.t) &&
-                    
-//     }
-// }
 
 #[cfg(test)]
 mod tests {
     use super::Intersection;
-    use crate::geo::Sphere;
+    use crate::geo::{Intersectable, Sphere};
 
     #[test]
     fn it_encapsulates_a_parameter_t_and_an_intersectable() {
-        let sphere = Sphere::unit();
-        let intersection = Intersection::new(3.5, Box::new(sphere));
-        if let Some(s) = intersection.intersectable.as_any().downcast_ref() {
-            assert_abs_diff_eq!(sphere, s);
-        }
+        let s = Sphere::unit();
+        let i = Intersection::new(3.5, Intersectable::Sphere(s));
+        let Intersectable::Sphere(s1) = i.intersectable;
+        assert_abs_diff_eq!(s, s1);
     }
 }
