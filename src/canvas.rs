@@ -1,4 +1,6 @@
 use crate::color::Color;
+use image::io::Reader;
+use std::{io::Cursor, path::Path};
 
 #[derive(Debug)]
 pub struct Canvas {
@@ -56,6 +58,15 @@ impl Canvas {
             is_new_line = true;
         }
         ppm
+    }
+
+    pub fn save(&self, path: &Path) -> Result<(), image::ImageError> {
+        let data = Cursor::new(self.to_ppm());
+        let reader = Reader::new(data)
+            .with_guessed_format()
+            .expect("This will never fail using Cursor");
+        let img = reader.decode().expect("Failed to read image");
+        img.save(path)
     }
 }
 

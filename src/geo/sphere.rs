@@ -17,7 +17,7 @@ impl Sphere {
         Self {
             origin,
             radius,
-            ..Default::default()
+            transform: Matrix4::identity(),
         }
     }
 
@@ -25,11 +25,13 @@ impl Sphere {
         Self {
             origin: Point3::origin(),
             radius: 1.0,
-            ..Default::default()
+            transform: Matrix4::identity()
         }
     }
 
     pub fn intersections(&self, ray: &Ray) -> Intersections {
+        // println!("Sphere:{:?}", self);
+        // println!("Ray:{:?}", ray);
         let transformed_ray = ray.transform(&self.transform.inversed());
         let sphere_to_ray: Vector3 = transformed_ray.origin - self.origin;
         let a = transformed_ray.direction.dot(&transformed_ray.direction);
@@ -60,15 +62,6 @@ impl AbsDiffEq for Sphere {
     }
 }
 
-impl Default for Sphere {
-    fn default() -> Self {
-        Self {
-            origin: Point3::origin(),
-            radius: 1.,
-            transform: Matrix4::identity(),
-        }
-    }
-}
 
 #[cfg(test)]
 mod tests {

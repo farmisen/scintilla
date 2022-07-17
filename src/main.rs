@@ -1,6 +1,6 @@
 #![allow(dead_code)]
 #![allow(unused_imports)]
-#![feature(generic_associated_types)]
+// #![feature(generic_associated_types)]
 
 #[macro_use]
 extern crate approx;
@@ -14,7 +14,8 @@ mod putting_it_together;
 fn main() {
     // putting_it_together::putting_it_together1::run()
     // putting_it_together::putting_it_together2::run()
-    putting_it_together::putting_it_together3::run()
+    // putting_it_together::putting_it_together3::run()
+    putting_it_together::putting_it_together4::run()
 }
 
 

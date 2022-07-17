@@ -17,6 +17,10 @@ impl Color {
         Self::new(1., 1., 1.)
     }
 
+    pub fn red() -> Self {
+        Self::new(1., 0., 0.)
+    }
+
     pub fn new(r: f64, g: f64, b: f64) -> Self {
         Self { r, g, b }
     }
