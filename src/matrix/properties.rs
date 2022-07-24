@@ -110,6 +110,12 @@ impl Matrix<4, 4> {
     }
 }
 
+// impl fmt::Display for Matrix<4, 4> {
+//     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+//         write!(f, "({}, {})", self.x, self.y)
+//     }
+// }
+
 impl<const W: usize, const H: usize> Matrix<W, H> {
     pub fn transposed(&self) -> Self {
         let mut res = Matrix::<W, H>::default();

@@ -33,6 +33,6 @@ mod tests {
         let s = Sphere::unit();
         let i = Intersection::new(3.5, Intersectable::Sphere(s));
         let Intersectable::Sphere(s1) = i.intersectable;
-        assert_abs_diff_eq!(s, s1);
+        assert_eq!(s, s1);
     }
 }
