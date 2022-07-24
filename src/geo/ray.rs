@@ -74,7 +74,7 @@ mod tests {
         let s = Sphere::new(Point3::point(0., 0., 0.), 1.);
         let i = Intersectable::Sphere(s);
         let xs = r.intersect(&i);
-        assert_eq!(xs.count(), 2);
+        assert_abs_diff_eq!(xs.count(), 2);
         assert_abs_diff_eq!(xs[0].t, 4.0);
         assert_abs_diff_eq!(xs[1].t, 6.0);
     }
@@ -85,7 +85,7 @@ mod tests {
         let s = Sphere::new(Point3::point(0., 0., 0.), 1.);
         let i = Intersectable::Sphere(s);
         let xs = r.intersect(&i);
-        assert_eq!(xs.count(), 2);
+        assert_abs_diff_eq!(xs.count(), 2);
         assert_abs_diff_eq!(xs[0].t, 5.0);
         assert_abs_diff_eq!(xs[1].t, 5.0);
     }
@@ -96,7 +96,7 @@ mod tests {
         let s = Sphere::new(Point3::point(0., 0., 0.), 1.);
         let i = Intersectable::Sphere(s);
         let xs = r.intersect(&i);
-        assert_eq!(xs.count(), 0);
+        assert_abs_diff_eq!(xs.count(), 0);
     }
 
     #[test]
@@ -105,7 +105,7 @@ mod tests {
         let s = Sphere::new(Point3::point(0., 0., 0.), 1.);
         let i = Intersectable::Sphere(s);
         let xs = r.intersect(&i);
-        assert_eq!(xs.count(), 2);
+        assert_abs_diff_eq!(xs.count(), 2);
         assert_abs_diff_eq!(xs[0].t, -1.0);
         assert_abs_diff_eq!(xs[1].t, 1.0);
     }
@@ -116,7 +116,7 @@ mod tests {
         let s = Sphere::new(Point3::point(0., 0., 0.), 1.);
         let i = Intersectable::Sphere(s);
         let xs = r.intersect(&i);
-        assert_eq!(xs.count(), 2);
+        assert_abs_diff_eq!(xs.count(), 2);
         assert_abs_diff_eq!(xs[0].t, -6.0);
         assert_abs_diff_eq!(xs[1].t, -4.0);
     }
